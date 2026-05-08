@@ -1,0 +1,14 @@
+{
+  "name": "cloudcart-backend",
+  "version": "1.0.0",
+  "description": "CloudCart backend API with health checks and Prometheus metrics",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node tests/api.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT"
+}
