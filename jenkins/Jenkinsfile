@@ -1,0 +1,104 @@
+pipeline {
+  agent any
+
+  options {
+    timestamps()
+    disableConcurrentBuilds()
+    buildDiscarder(logRotator(numToKeepStr: '20'))
+  }
+
+  environment {
+    REGISTRY = "ghcr.io/pushpendra2601"
+    BACKEND_IMAGE = "cloudcart-backend"
+    FRONTEND_IMAGE = "cloudcart-frontend"
+    NAMESPACE = "cloudcart"
+    RELEASE = "cloudcart"
+    CHART = "helm/cloudcart"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+        script {
+          env.IMAGE_TAG = "${env.BUILD_NUMBER}-${sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()}"
+        }
+      }
+    }
+
+    stage('Backend Tests') {
+      steps {
+        dir('app/backend') {
+          sh 'npm ci'
+          sh 'npm test'
+        }
+      }
+    }
+
+    stage('Build Images') {
+      steps {
+        sh '''
+          docker build -t $REGISTRY/$BACKEND_IMAGE:$IMAGE_TAG app/backend
+          docker build -t $REGISTRY/$FRONTEND_IMAGE:$IMAGE_TAG app/frontend
+        '''
+      }
+    }
+
+    stage('Security Scan') {
+      steps {
+        sh '''
+          trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$BACKEND_IMAGE:$IMAGE_TAG
+          trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$FRONTEND_IMAGE:$IMAGE_TAG
+        '''
+      }
+    }
+
+    stage('Push Images') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'registry-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+          sh '''
+            echo $PASS | docker login ghcr.io -u $USER --password-stdin
+            docker push $REGISTRY/$BACKEND_IMAGE:$IMAGE_TAG
+            docker push $REGISTRY/$FRONTEND_IMAGE:$IMAGE_TAG
+          '''
+        }
+      }
+    }
+
+    stage('Deploy to Kubernetes') {
+      steps {
+        sh '''
+          helm upgrade --install $RELEASE $CHART \
+            --namespace $NAMESPACE \
+            --create-namespace \
+            --set backend.image.repository=$REGISTRY/$BACKEND_IMAGE \
+            --set backend.image.tag=$IMAGE_TAG \
+            --set frontend.image.repository=$REGISTRY/$FRONTEND_IMAGE \
+            --set frontend.image.tag=$IMAGE_TAG \
+            --atomic \
+            --timeout 5m
+        '''
+      }
+    }
+
+    stage('Verify Rollout') {
+      steps {
+        sh '''
+          kubectl rollout status deployment/cloudcart-backend -n $NAMESPACE --timeout=180s
+          kubectl rollout status deployment/cloudcart-frontend -n $NAMESPACE --timeout=180s
+          kubectl get pods -n $NAMESPACE
+        '''
+      }
+    }
+  }
+
+  post {
+    failure {
+      sh '''
+        echo "Deployment failed. Showing diagnostics..."
+        kubectl get pods -n $NAMESPACE || true
+        kubectl describe pods -n $NAMESPACE || true
+      '''
+    }
+  }
+}

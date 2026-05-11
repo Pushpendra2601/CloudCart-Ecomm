@@ -1,0 +1,28 @@
+controller:
+  image:
+    tag: "lts-jdk21"
+  admin:
+    username: admin
+  serviceType: ClusterIP
+  installPlugins:
+    - kubernetes
+    - workflow-aggregator
+    - git
+    - github
+    - docker-workflow
+    - credentials-binding
+    - pipeline-stage-view
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+persistence:
+  enabled: true
+  size: 20Gi
+rbac:
+  create: true
+serviceAccount:
+  create: true
