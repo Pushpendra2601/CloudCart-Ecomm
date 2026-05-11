@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+    label 'wsl-linux'
+  }
 
   options {
     timestamps()
@@ -8,7 +10,7 @@ pipeline {
   }
 
   environment {
-    REGISTRY = "ghcr.io/pushpendra2601"
+    REGISTRY = "ghcr.io/YOUR_USER"
     BACKEND_IMAGE = "cloudcart-backend"
     FRONTEND_IMAGE = "cloudcart-frontend"
     NAMESPACE = "cloudcart"
