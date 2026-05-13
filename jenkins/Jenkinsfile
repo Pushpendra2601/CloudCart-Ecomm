@@ -30,10 +30,13 @@ pipeline {
 
     stage('Backend Tests') {
       steps {
-        dir('app/backend') {
-          sh 'npm ci'
-          sh 'npm test'
-        }
+        sh '''
+          docker run --rm \
+            -v "$PWD/app/backend:/app" \
+            -w /app \
+            node:22-alpine \
+            sh -c "npm ci && npm test"
+        '''
       }
     }
 
@@ -96,11 +99,17 @@ pipeline {
 
   post {
     failure {
-      sh '''
-        echo "Deployment failed. Showing diagnostics..."
-        kubectl get pods -n $NAMESPACE || true
-        kubectl describe pods -n $NAMESPACE || true
-      '''
+      script {
+        try {
+          sh '''
+            echo "Deployment failed. Showing diagnostics..."
+            kubectl get pods -n $NAMESPACE || true
+            kubectl describe pods -n $NAMESPACE || true
+          '''
+        } catch (ignored) {
+          echo "Deployment diagnostics skipped because no Linux workspace was available."
+        }
+      }
     }
   }
 }
