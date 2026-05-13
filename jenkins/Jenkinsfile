@@ -10,7 +10,7 @@ pipeline {
   }
 
   environment {
-    REGISTRY = "ghcr.io/Pushpendra2601"
+    REGISTRY = "ghcr.io/pushpendra2601"
     BACKEND_IMAGE = "cloudcart-backend"
     FRONTEND_IMAGE = "cloudcart-frontend"
     NAMESPACE = "cloudcart"
