@@ -50,13 +50,14 @@ pipeline {
     }
 
     stage('Security Scan') {
-      steps {
-        sh '''
-          trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$BACKEND_IMAGE:$IMAGE_TAG
-          trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$FRONTEND_IMAGE:$IMAGE_TAG
-        '''
-      }
-    }
+  steps {
+    sh '''
+      /snap/bin/trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$BACKEND_IMAGE:$IMAGE_TAG
+      /snap/bin/trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$FRONTEND_IMAGE:$IMAGE_TAG
+    '''
+  }
+}
+
 
     stage('Push Images') {
       steps {
