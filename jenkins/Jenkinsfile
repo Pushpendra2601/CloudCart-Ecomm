@@ -15,7 +15,7 @@ pipeline {
     FRONTEND_IMAGE = "cloudcart-frontend"
     NAMESPACE = "cloudcart"
     RELEASE = "cloudcart"
-    CHART = "helm/cloudcart"
+    CHART = "./helm/cloudcart"
   }
 
   stages {
@@ -50,14 +50,13 @@ pipeline {
     }
 
     stage('Security Scan') {
-  steps {
-    sh '''
-      /snap/bin/trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$BACKEND_IMAGE:$IMAGE_TAG
-      /snap/bin/trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$FRONTEND_IMAGE:$IMAGE_TAG
-    '''
-  }
-}
-
+      steps {
+        sh '''
+          trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$BACKEND_IMAGE:$IMAGE_TAG
+          trivy image --severity HIGH,CRITICAL --exit-code 1 $REGISTRY/$FRONTEND_IMAGE:$IMAGE_TAG
+        '''
+      }
+    }
 
     stage('Push Images') {
       steps {
@@ -81,7 +80,7 @@ pipeline {
             --set backend.image.tag=$IMAGE_TAG \
             --set frontend.image.repository=$REGISTRY/$FRONTEND_IMAGE \
             --set frontend.image.tag=$IMAGE_TAG \
-            --atomic \
+            --rollback-on-failure \
             --timeout 5m
         '''
       }
