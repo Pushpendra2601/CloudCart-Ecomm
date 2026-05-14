@@ -21,6 +21,10 @@ spec:
       labels:
         app: cloudcart-frontend
     spec:
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       securityContext:
         runAsNonRoot: false
       containers:

@@ -72,17 +72,28 @@ pipeline {
 
     stage('Deploy to Kubernetes') {
       steps {
-        sh '''
-          helm upgrade --install $RELEASE $CHART \
-            --namespace $NAMESPACE \
-            --create-namespace \
-            --set backend.image.repository=$REGISTRY/$BACKEND_IMAGE \
-            --set backend.image.tag=$IMAGE_TAG \
-            --set frontend.image.repository=$REGISTRY/$FRONTEND_IMAGE \
-            --set frontend.image.tag=$IMAGE_TAG \
-            --rollback-on-failure \
-            --timeout 5m
-        '''
+        withCredentials([usernamePassword(credentialsId: 'registry-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+          sh '''
+            kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+            kubectl create secret docker-registry ghcr-creds \
+              --namespace $NAMESPACE \
+              --docker-server=ghcr.io \
+              --docker-username=$USER \
+              --docker-password=$PASS \
+              --dry-run=client -o yaml | kubectl apply -f -
+
+            helm upgrade --install $RELEASE $CHART \
+              --namespace $NAMESPACE \
+              --create-namespace \
+              --set backend.image.repository=$REGISTRY/$BACKEND_IMAGE \
+              --set backend.image.tag=$IMAGE_TAG \
+              --set frontend.image.repository=$REGISTRY/$FRONTEND_IMAGE \
+              --set frontend.image.tag=$IMAGE_TAG \
+              --set global.imagePullSecrets[0].name=ghcr-creds \
+              --rollback-on-failure \
+              --timeout 10m
+          '''
+        }
       }
     }
 

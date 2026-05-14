@@ -23,6 +23,10 @@ spec:
     spec:
       serviceAccountName: cloudcart-app
       automountServiceAccountToken: false
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       securityContext:
         runAsNonRoot: true
         runAsUser: 100
