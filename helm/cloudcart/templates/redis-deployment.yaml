@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudcart-redis
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: cloudcart-redis
+    {{- include "cloudcart.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudcart-redis
+  template:
+    metadata:
+      labels:
+        app: cloudcart-redis
+    spec:
+      containers:
+        - name: redis
+          image: {{ .Values.redis.image | quote }}
+          ports:
+            - name: redis
+              containerPort: 6379
+          resources:
+            {{- toYaml .Values.redis.resources | nindent 12 }}

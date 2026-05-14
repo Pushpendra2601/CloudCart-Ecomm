@@ -1,0 +1,13 @@
+frontend:
+  replicaCount: 1
+
+backend:
+  replicaCount: 1
+  hpa:
+    enabled: false
+
+postgres:
+  storage: 2Gi
+
+ingress:
+  host: cloudcart.local

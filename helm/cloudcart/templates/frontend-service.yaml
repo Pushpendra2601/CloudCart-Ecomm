@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudcart-frontend
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: cloudcart-frontend
+    {{- include "cloudcart.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    app: cloudcart-frontend
+  ports:
+    - name: http
+      port: {{ .Values.frontend.service.port }}
+      targetPort: http

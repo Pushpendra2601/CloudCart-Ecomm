@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cloudcart-postgres
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: cloudcart-postgres
+    {{- include "cloudcart.labels" . | nindent 4 }}
+spec:
+  serviceName: cloudcart-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudcart-postgres
+  template:
+    metadata:
+      labels:
+        app: cloudcart-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.image | quote }}
+          ports:
+            - name: postgres
+              containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: cloudcart-secret
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            {{- toYaml .Values.postgres.resources | nindent 12 }}
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.postgres.storage }}

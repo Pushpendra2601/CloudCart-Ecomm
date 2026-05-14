@@ -1,0 +1,25 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: cloudcart-backend-pdb
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "cloudcart.labels" . | nindent 4 }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: cloudcart-backend
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: cloudcart-frontend-pdb
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "cloudcart.labels" . | nindent 4 }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: cloudcart-frontend

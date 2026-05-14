@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cloudcart-readonly
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "cloudcart.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: cloudcart-app
+    namespace: {{ .Values.global.namespace }}
+roleRef:
+  kind: Role
+  name: cloudcart-readonly
+  apiGroup: rbac.authorization.k8s.io

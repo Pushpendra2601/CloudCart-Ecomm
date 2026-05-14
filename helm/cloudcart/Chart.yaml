@@ -1,0 +1,6 @@
+apiVersion: v2
+name: cloudcart
+description: Production-oriented Helm chart for the CloudCart e-commerce platform.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
