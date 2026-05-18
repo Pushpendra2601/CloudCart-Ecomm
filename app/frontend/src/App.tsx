@@ -16,6 +16,7 @@ import { useProducts } from "./hooks/useProducts";
 import { useCart } from "./hooks/useCart";
 import { useTheme } from "./hooks/useTheme";
 import { usePlatformHealth } from "./hooks/usePlatformHealth";
+import { createOrder } from "./lib/api";
 import type { Product } from "./types/product";
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
   const products = useProducts();
   const cart = useCart();
   const [toast, setToast] = useState<string | null>(null);
+  const [checkoutPending, setCheckoutPending] = useState(false);
 
   useEffect(() => {
     if (!toast) return;
@@ -34,6 +36,22 @@ export default function App() {
   const addToCart = (product: Product) => {
     cart.add(product);
     setToast(`${product.name} added to cart`);
+  };
+
+  const checkout = async () => {
+    if (cart.items.length === 0 || checkoutPending) return;
+
+    setCheckoutPending(true);
+    try {
+      const order = await createOrder(cart.items);
+      cart.clear();
+      cart.setOpen(false);
+      setToast(`Order ${order.id} accepted by backend API`);
+    } catch (error) {
+      setToast(error instanceof Error ? error.message : "Order API failed");
+    } finally {
+      setCheckoutPending(false);
+    }
   };
 
   return (
@@ -117,9 +135,11 @@ export default function App() {
         open={cart.open}
         items={cart.items}
         subtotal={cart.subtotal}
+        checkoutPending={checkoutPending}
         onClose={() => cart.setOpen(false)}
         onRemove={cart.remove}
         onClear={cart.clear}
+        onCheckout={checkout}
       />
       <Toast message={toast} />
     </div>

@@ -8,12 +8,14 @@ type CartDrawerProps = {
   open: boolean;
   items: CartItem[];
   subtotal: number;
+  checkoutPending: boolean;
   onClose: () => void;
   onRemove: (id: string) => void;
   onClear: () => void;
+  onCheckout: () => void;
 };
 
-export function CartDrawer({ open, items, subtotal, onClose, onRemove, onClear }: CartDrawerProps) {
+export function CartDrawer({ open, items, subtotal, checkoutPending, onClose, onRemove, onClear, onCheckout }: CartDrawerProps) {
   return (
     <AnimatePresence>
       {open && (
@@ -61,7 +63,9 @@ export function CartDrawer({ open, items, subtotal, onClose, onRemove, onClear }
                 <span className="font-bold text-slate-500">Subtotal</span>
                 <span className="text-2xl font-black text-slate-950 dark:text-white">{currency(subtotal)}</span>
               </div>
-              <Button className="mt-4 w-full">Simulate checkout</Button>
+              <Button className="mt-4 w-full" onClick={onCheckout} disabled={items.length === 0 || checkoutPending}>
+                {checkoutPending ? "Submitting order..." : "Submit order to API"}
+              </Button>
               <Button variant="ghost" className="mt-2 w-full" onClick={onClear}>Clear cart</Button>
             </div>
           </motion.aside>

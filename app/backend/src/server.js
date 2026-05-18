@@ -14,7 +14,7 @@ const products = [
 const orders = [];
 const metrics = {
   requests: {},
-  latencySeconds: []
+  latency: {}
 };
 
 function json(res, statusCode, payload) {
@@ -65,10 +65,11 @@ function observe(method, path, statusCode, durationSeconds) {
     : path;
   const key = `${method}|${route}|${statusCode}`;
   metrics.requests[key] = (metrics.requests[key] || 0) + 1;
-  metrics.latencySeconds.push({ method, route, statusCode, durationSeconds });
-  if (metrics.latencySeconds.length > 500) {
-    metrics.latencySeconds.shift();
-  }
+  const currentLatency = metrics.latency[key] || { sum: 0, count: 0 };
+  metrics.latency[key] = {
+    sum: currentLatency.sum + durationSeconds,
+    count: currentLatency.count + 1
+  };
 }
 
 function prometheusMetrics() {
@@ -91,10 +92,12 @@ function prometheusMetrics() {
     lines.push(`http_requests_total{method="${method}",route="${route}",status="${status}"} ${count}`);
   });
 
-  lines.push('# HELP http_request_duration_seconds Recent HTTP request latency in seconds.');
+  lines.push('# HELP http_request_duration_seconds Request latency in seconds.');
   lines.push('# TYPE http_request_duration_seconds summary');
-  metrics.latencySeconds.forEach(sample => {
-    lines.push(`http_request_duration_seconds{method="${sample.method}",route="${sample.route}",status="${sample.statusCode}"} ${sample.durationSeconds.toFixed(6)}`);
+  Object.entries(metrics.latency).forEach(([key, value]) => {
+    const [method, route, status] = key.split('|');
+    lines.push(`http_request_duration_seconds_sum{method="${method}",route="${route}",status="${status}"} ${value.sum.toFixed(6)}`);
+    lines.push(`http_request_duration_seconds_count{method="${method}",route="${route}",status="${status}"} ${value.count}`);
   });
 
   return `${lines.join('\n')}\n`;

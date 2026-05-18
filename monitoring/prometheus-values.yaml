@@ -1,0 +1,27 @@
+grafana:
+  enabled: true
+  adminPassword: admin123
+  defaultDashboardsEnabled: true
+  sidecar:
+    dashboards:
+      enabled: true
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorNamespaceSelector: {}
+    ruleSelectorNilUsesHelmValues: false
+    ruleNamespaceSelector: {}
+    retention: 10d
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: "2"
+        memory: 3Gi
+alertmanager:
+  enabled: true
+kubeStateMetrics:
+  enabled: true
+nodeExporter:
+  enabled: true

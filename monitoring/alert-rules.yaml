@@ -1,0 +1,40 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cloudcart-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: cloudcart.rules
+      rules:
+        - alert: CloudCartPodCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total{namespace="cloudcart"}[5m]) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: CloudCart pod is restarting
+            description: "A CloudCart container has restarted in the last 5 minutes."
+        - alert: CloudCartDeploymentUnavailable
+          expr: kube_deployment_status_replicas_unavailable{namespace="cloudcart"} > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: CloudCart deployment has unavailable replicas
+        - alert: CloudCartHighErrorRate
+          expr: sum(rate(http_requests_total{status=~"5.."}[5m])) > 0.05
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: CloudCart backend has elevated 5xx errors
+        - alert: CloudCartPVCAlmostFull
+          expr: kubelet_volume_stats_available_bytes{namespace="cloudcart"} / kubelet_volume_stats_capacity_bytes{namespace="cloudcart"} < 0.20
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: CloudCart persistent volume has less than 20 percent free space

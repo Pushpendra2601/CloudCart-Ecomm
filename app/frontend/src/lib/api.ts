@@ -1,4 +1,4 @@
-import type { Product } from "../types/product";
+import type { CartItem, Product } from "../types/product";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
@@ -33,6 +33,30 @@ export async function getReadiness(): Promise<{ status: string }> {
   }
 
   return response.json() as Promise<{ status: string }>;
+}
+
+export async function createOrder(items: CartItem[]): Promise<{ id: string; status: string }> {
+  const response = await fetch(`${API_BASE}/api/orders`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({
+      items: items.map(item => ({
+        productId: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        unitPrice: item.price
+      }))
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Order API returned ${response.status}`);
+  }
+
+  const data = await response.json() as { order: { id: string; status: string } };
+  return data.order;
 }
 
 function inferCategory(name: string) {

@@ -103,5 +103,6 @@ flowchart LR
 
 - [Architecture](docs/architecture.md)
 - [Runbook](docs/runbook.md)
+- [Jenkins Setup](docs/jenkins-setup.md)
 - [Interview Notes](docs/interview-notes.md)
 - [Trivy Policy](security/trivy-policy.md)
