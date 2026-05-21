@@ -11,10 +11,7 @@
 ![NodeJS](https://img.shields.io/badge/Backend-Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
 ![Redis](https://img.shields.io/badge/Cache-Redis-DC382D?style=flat&logo=redis&logoColor=white)
-![Jenkins](...)  ![Helm](...)  ![Docker](...)  ![Kubernetes](...)
-![GHCR](...)  ![Trivy](...)
-![Prometheus](...)  ![Grafana](...)
-![React](...)  ![NodeJS](...)  ![PostgreSQL](...)  ![Redis](...)
+
 
 Production-oriented DevOps and Kubernetes learning project for deploying a small e-commerce workload end to end.
 
