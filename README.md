@@ -1,4 +1,8 @@
 # CloudCart DevOps Platform
+![Jenkins](https://img.shields.io/badge/CI%2FCD-Jenkins-D24939?style=flat&logo=jenkins&logoColor=white)
+![Helm](https://img.shields.io/badge/Deploy-Helm-0F1689?style=flat&logo=helm&logoColor=white)
+![Docker](https://img.shields.io/badge/Container-Docker-2496ED?style=flat&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Orchestration-Kubernetes-326CE5?style=flat&logo=kubernetes&logoColor=white)
 
 Production-oriented DevOps and Kubernetes learning project for deploying a small e-commerce workload end to end.
 
