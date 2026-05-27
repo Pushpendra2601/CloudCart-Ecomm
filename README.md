@@ -1,4 +1,17 @@
 # CloudCart DevOps Platform
+![Jenkins](https://img.shields.io/badge/CI%2FCD-Jenkins-D24939?style=flat&logo=jenkins&logoColor=white)
+![Helm](https://img.shields.io/badge/Deploy-Helm-0F1689?style=flat&logo=helm&logoColor=white)
+![Docker](https://img.shields.io/badge/Container-Docker-2496ED?style=flat&logo=docker&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Orchestration-Kubernetes-326CE5?style=flat&logo=kubernetes&logoColor=white)
+![GHCR](https://img.shields.io/badge/Registry-GHCR-181717?style=flat&logo=github&logoColor=white)
+![Trivy](https://img.shields.io/badge/Security-Trivy-1904DA?style=flat&logo=aquasecurity&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Metrics-Prometheus-E6522C?style=flat&logo=prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/Dashboard-Grafana-F46800?style=flat&logo=grafana&logoColor=white)
+![React](https://img.shields.io/badge/Frontend-React-61DAFB?style=flat&logo=react&logoColor=black)
+![NodeJS](https://img.shields.io/badge/Backend-Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/Cache-Redis-DC382D?style=flat&logo=redis&logoColor=white)
+
 
 Production-oriented DevOps and Kubernetes learning project for deploying a small e-commerce workload end to end.
 
