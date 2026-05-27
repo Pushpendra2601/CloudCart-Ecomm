@@ -1,0 +1,15 @@
+global:
+  imagePullSecrets:
+    - name: ghcr-creds
+
+frontend:
+  image:
+    repository: ghcr.io/pushpendra2601/cloudcart-frontend
+    tag: "27-8bbdca2"
+    pullPolicy: IfNotPresent
+
+backend:
+  image:
+    repository: ghcr.io/pushpendra2601/cloudcart-backend
+    tag: "27-8bbdca2"
+    pullPolicy: IfNotPresent
