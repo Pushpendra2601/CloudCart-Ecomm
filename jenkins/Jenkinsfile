@@ -14,8 +14,7 @@ pipeline {
     BACKEND_IMAGE = "cloudcart-backend"
     FRONTEND_IMAGE = "cloudcart-frontend"
     NAMESPACE = "cloudcart"
-    RELEASE = "cloudcart"
-    CHART = "./helm/cloudcart"
+    GITOPS_VALUES_FILE = "helm/cloudcart/values-gitops.yaml"
   }
 
   stages {
@@ -70,40 +69,21 @@ pipeline {
       }
     }
 
-    stage('Deploy to Kubernetes') {
+    stage('Update GitOps Image Tag') {
       steps {
-        withCredentials([usernamePassword(credentialsId: 'registry-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+        withCredentials([usernamePassword(credentialsId: 'registry-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
           sh '''
-            kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
-            kubectl create secret docker-registry ghcr-creds \
-              --namespace $NAMESPACE \
-              --docker-server=ghcr.io \
-              --docker-username=$USER \
-              --docker-password=$PASS \
-              --dry-run=client -o yaml | kubectl apply -f -
+            git config user.name "cloudcart-jenkins"
+            git config user.email "jenkins@cloudcart.local"
 
-            helm upgrade --install $RELEASE $CHART \
-              --namespace $NAMESPACE \
-              --create-namespace \
-              --set backend.image.repository=$REGISTRY/$BACKEND_IMAGE \
-              --set backend.image.tag=$IMAGE_TAG \
-              --set frontend.image.repository=$REGISTRY/$FRONTEND_IMAGE \
-              --set frontend.image.tag=$IMAGE_TAG \
-              --set global.imagePullSecrets[0].name=ghcr-creds \
-              --rollback-on-failure \
-              --timeout 10m
+            sed -i "s|tag: .*|tag: \\"$IMAGE_TAG\\"|g" "$GITOPS_VALUES_FILE"
+
+            git add "$GITOPS_VALUES_FILE"
+            git commit -m "Update CloudCart image tag to $IMAGE_TAG" || exit 0
+
+            git push https://$GIT_USER:$GIT_TOKEN@github.com/Pushpendra2601/CloudCart-Ecomm.git HEAD:main
           '''
         }
-      }
-    }
-
-    stage('Verify Rollout') {
-      steps {
-        sh '''
-          kubectl rollout status deployment/cloudcart-backend -n $NAMESPACE --timeout=180s
-          kubectl rollout status deployment/cloudcart-frontend -n $NAMESPACE --timeout=180s
-          kubectl get pods -n $NAMESPACE
-        '''
       }
     }
   }
