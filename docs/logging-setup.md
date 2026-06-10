@@ -82,7 +82,19 @@ Frontend logs:
 Logs containing order activity:
 
 ```logql
-{namespace="cloudcart", pod=~"cloudcart-backend.*"} |= "order"
+{namespace="cloudcart", pod=~"cloudcart-backend.*"} |= "/api/orders"
+```
+
+Backend API request logs:
+
+```logql
+{namespace="cloudcart", pod=~"cloudcart-backend.*"} |= "http_request"
+```
+
+Frontend NGINX access logs:
+
+```logql
+{namespace="cloudcart", pod=~"cloudcart-frontend.*"}
 ```
 
 Error-looking log lines:
