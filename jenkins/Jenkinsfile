@@ -42,8 +42,8 @@ pipeline {
     stage('Build Images') {
       steps {
         sh '''
-          docker build -t $REGISTRY/$BACKEND_IMAGE:$IMAGE_TAG app/backend
-          docker build -t $REGISTRY/$FRONTEND_IMAGE:$IMAGE_TAG app/frontend
+          docker build --pull -t $REGISTRY/$BACKEND_IMAGE:$IMAGE_TAG app/backend
+          docker build --pull -t $REGISTRY/$FRONTEND_IMAGE:$IMAGE_TAG app/frontend
         '''
       }
     }
