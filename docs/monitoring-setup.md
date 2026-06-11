@@ -2,6 +2,8 @@
 
 This guide connects the deployed CloudCart application to Prometheus, Grafana, and Alertmanager.
 
+For centralized pod logs with Promtail, Loki, and Grafana, use [Logging Setup](logging-setup.md).
+
 ## 1. Install kube-prometheus-stack
 
 Run from WSL at the project root:

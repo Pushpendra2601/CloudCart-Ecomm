@@ -8,6 +8,8 @@
 ![Trivy](https://img.shields.io/badge/Security-Trivy-1904DA?style=flat&logo=aquasecurity&logoColor=white)
 ![Prometheus](https://img.shields.io/badge/Metrics-Prometheus-E6522C?style=flat&logo=prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Dashboard-Grafana-F46800?style=flat&logo=grafana&logoColor=white)
+![Loki](https://img.shields.io/badge/Logs-Loki-F5A623?style=flat&logo=grafana&logoColor=white)
+![Promtail](https://img.shields.io/badge/Collector-Promtail-F46800?style=flat&logo=grafana&logoColor=white)
 ![React](https://img.shields.io/badge/Frontend-React-61DAFB?style=flat&logo=react&logoColor=black)
 ![NodeJS](https://img.shields.io/badge/Backend-Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
@@ -32,7 +34,7 @@ CloudCart includes:
 - Redis cache
 - Ingress, HPA, PDB, RBAC, ConfigMaps, Secrets, and NetworkPolicies
 - Jenkins pipeline for CI, image scanning, image publishing, and deployment promotion
-- Prometheus, Grafana, Alertmanager, and application metrics
+- Prometheus, Grafana, Alertmanager, Loki, Promtail, application metrics, and pod logs
 - Trivy image scanning and operational runbooks
 - Backup, rollback, and troubleshooting scripts
 
@@ -212,5 +214,7 @@ On the `argocd` branch:
 - [Architecture](docs/architecture.md)
 - [Runbook](docs/runbook.md)
 - [Jenkins Setup](docs/jenkins-setup.md)
+- [Monitoring Setup](docs/monitoring-setup.md)
+- [Logging Setup](docs/logging-setup.md)
 - [Interview Notes](docs/interview-notes.md)
 - [Trivy Policy](security/trivy-policy.md)

@@ -72,6 +72,21 @@ function observe(method, path, statusCode, durationSeconds) {
   };
 }
 
+function logRequest(req, path, statusCode, durationSeconds) {
+  const log = {
+    level: statusCode >= 500 ? 'error' : 'info',
+    event: 'http_request',
+    method: req.method,
+    path,
+    status: statusCode,
+    duration_ms: Number((durationSeconds * 1000).toFixed(2)),
+    user_agent: req.headers['user-agent'] || '',
+    timestamp: new Date().toISOString()
+  };
+
+  console.log(JSON.stringify(log));
+}
+
 function prometheusMetrics() {
   const lines = [
     '# HELP cloudcart_up CloudCart backend availability.',
@@ -158,6 +173,7 @@ async function router(req, res) {
 const server = http.createServer(async (req, res) => {
   const started = process.hrtime.bigint();
   let statusCode = 500;
+  const path = new URL(req.url, `http://${req.headers.host || 'localhost'}`).pathname;
   try {
     await router(req, res);
     statusCode = res.statusCode;
@@ -166,7 +182,8 @@ const server = http.createServer(async (req, res) => {
     json(res, statusCode, { error: error.message });
   } finally {
     const durationSeconds = Number(process.hrtime.bigint() - started) / 1e9;
-    observe(req.method, new URL(req.url, `http://${req.headers.host || 'localhost'}`).pathname, statusCode, durationSeconds);
+    observe(req.method, path, statusCode, durationSeconds);
+    logRequest(req, path, statusCode, durationSeconds);
   }
 });
 

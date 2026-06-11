@@ -24,10 +24,46 @@ kubectl get events -n cloudcart --sort-by=.lastTimestamp
 
 ## Roll Back
 
+### Helm Branch
+
 ```bash
 helm history cloudcart -n cloudcart
 ./scripts/rollback.sh REVISION
 ```
+
+### ArgoCD Branch
+
+Rollback in the GitOps flow is performed by reverting the Git commit that changed the desired image tag.
+
+```bash
+git log --oneline -- helm/cloudcart/values-gitops.yaml
+./scripts/argocd-rollback.sh COMMIT_ID
+```
+
+ArgoCD will sync Kubernetes back to the image tag stored in Git.
+
+## ArgoCD Drift and Self-Heal
+
+Create a manual cluster drift:
+
+```bash
+./scripts/argocd-drift-demo.sh
+```
+
+If auto-sync is disabled, restore manually:
+
+```bash
+argocd app sync cloudcart
+argocd app wait cloudcart --health --timeout 300
+```
+
+Enable automated sync, self-heal, and prune:
+
+```bash
+./scripts/argocd-enable-self-heal.sh
+```
+
+After self-heal is enabled, repeat the drift demo. ArgoCD should restore the live deployment back to the desired state from Git.
 
 ## Port Forward
 
@@ -35,6 +71,7 @@ helm history cloudcart -n cloudcart
 kubectl port-forward -n cloudcart svc/cloudcart-frontend 8080:80
 kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
 kubectl port-forward -n monitoring svc/monitoring-kube-prometheus-prometheus 9090:9090
+kubectl port-forward -n monitoring svc/loki-gateway 3100:80
 ```
 
 ## Common Issues
