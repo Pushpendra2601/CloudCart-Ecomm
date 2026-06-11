@@ -5,11 +5,11 @@ global:
 frontend:
   image:
     repository: ghcr.io/pushpendra2601/cloudcart-frontend
-    tag: "28-b46dfc7"
+    tag: "35-99c0b3f"
     pullPolicy: IfNotPresent
 
 backend:
   image:
     repository: ghcr.io/pushpendra2601/cloudcart-backend
-    tag: "28-b46dfc7"
+    tag: "35-99c0b3f"
     pullPolicy: IfNotPresent
