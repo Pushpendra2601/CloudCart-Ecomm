@@ -6,6 +6,7 @@
 ![Kubernetes](https://img.shields.io/badge/Orchestration-Kubernetes-326CE5?style=flat&logo=kubernetes&logoColor=white)
 ![GHCR](https://img.shields.io/badge/Registry-GHCR-181717?style=flat&logo=github&logoColor=white)
 ![Trivy](https://img.shields.io/badge/Security-Trivy-1904DA?style=flat&logo=aquasecurity&logoColor=white)
+![Kyverno](https://img.shields.io/badge/Policy-Kyverno-326CE5?style=flat&logo=kubernetes&logoColor=white)
 ![Prometheus](https://img.shields.io/badge/Metrics-Prometheus-E6522C?style=flat&logo=prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Dashboard-Grafana-F46800?style=flat&logo=grafana&logoColor=white)
 ![Loki](https://img.shields.io/badge/Logs-Loki-F5A623?style=flat&logo=grafana&logoColor=white)
@@ -36,6 +37,7 @@ CloudCart includes:
 - Jenkins pipeline for CI, image scanning, image publishing, and deployment promotion
 - Prometheus, Grafana, Alertmanager, Loki, Promtail, application metrics, and pod logs
 - Trivy image scanning and operational runbooks
+- Kyverno policy enforcement planned for admission-time platform guardrails
 - Backup, rollback, and troubleshooting scripts
 
 ## Architecture Options
@@ -216,5 +218,6 @@ On the `argocd` branch:
 - [Jenkins Setup](docs/jenkins-setup.md)
 - [Monitoring Setup](docs/monitoring-setup.md)
 - [Logging Setup](docs/logging-setup.md)
+- [Kyverno Policy Plan](docs/kyverno-policy-plan.md)
 - [Interview Notes](docs/interview-notes.md)
 - [Trivy Policy](security/trivy-policy.md)
