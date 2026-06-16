@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kyverno-bad-latest-demo
+  namespace: cloudcart
+  labels:
+    app: cloudcart-backend
+spec:
+  containers:
+    - name: bad
+      image: nginx:latest
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          cpu: 50m
+          memory: 64Mi

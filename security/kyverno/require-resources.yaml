@@ -1,0 +1,32 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: cloudcart-require-resources
+  annotations:
+    policies.kyverno.io/title: Require resource requests and limits
+    policies.kyverno.io/category: CloudCart Platform Guardrails
+    policies.kyverno.io/severity: medium
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: containers-must-have-resource-boundaries
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - cloudcart
+      validate:
+        message: "CloudCart containers must define CPU/memory requests and limits."
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  requests:
+                    cpu: "?*"
+                    memory: "?*"
+                  limits:
+                    cpu: "?*"
+                    memory: "?*"
