@@ -1,0 +1,33 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: cloudcart-restrict-app-image-registry
+  annotations:
+    policies.kyverno.io/title: Restrict CloudCart app images to GHCR
+    policies.kyverno.io/category: CloudCart Platform Guardrails
+    policies.kyverno.io/severity: high
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: frontend-backend-images-must-use-ghcr
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - cloudcart
+              selector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - cloudcart-backend
+                      - cloudcart-frontend
+      validate:
+        message: "CloudCart frontend/backend images must come from ghcr.io/pushpendra2601."
+        pattern:
+          spec:
+            containers:
+              - image: "ghcr.io/pushpendra2601/*"

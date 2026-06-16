@@ -96,4 +96,45 @@ kubectl get clusterpolicy
 kubectl get policyreport -A
 ```
 
-After policies are installed, test them with a bad deployment manifest that uses `:latest` or omits resource limits. The API server should reject it when policies are in enforce mode.
+## Apply CloudCart Policies
+
+The policies are stored in:
+
+```text
+security/kyverno/
+```
+
+Apply them:
+
+```bash
+chmod +x scripts/apply-kyverno-policies.sh
+./scripts/apply-kyverno-policies.sh
+```
+
+The first version runs in `Audit` mode so ArgoCD sync is not blocked while the platform rules are being introduced.
+
+## Check Reports
+
+```bash
+kubectl get clusterpolicy
+kubectl get policyreport -A
+kubectl describe policyreport -n cloudcart
+```
+
+## Test A Bad Pod
+
+Apply the intentionally bad test pod:
+
+```bash
+kubectl apply -f security/kyverno/test-bad-latest-pod.yaml
+```
+
+In audit mode, Kyverno records a violation but does not block the pod.
+
+After switching the relevant policy to `Enforce`, the same manifest should be rejected.
+
+Clean up:
+
+```bash
+kubectl delete -f security/kyverno/test-bad-latest-pod.yaml --ignore-not-found
+```

@@ -1,0 +1,30 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: cloudcart-disallow-latest-tag
+  annotations:
+    policies.kyverno.io/title: Disallow latest image tag
+    policies.kyverno.io/category: CloudCart Platform Guardrails
+    policies.kyverno.io/severity: medium
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: containers-must-not-use-latest
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - cloudcart
+      validate:
+        message: "CloudCart workloads must use immutable image tags, not ':latest'."
+        pattern:
+          spec:
+            =(initContainers):
+              - image: "!*:latest"
+            containers:
+              - image: "!*:latest"
+            =(ephemeralContainers):
+              - image: "!*:latest"
