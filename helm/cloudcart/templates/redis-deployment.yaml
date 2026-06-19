@@ -16,11 +16,20 @@ spec:
       labels:
         app: cloudcart-redis
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: redis
           image: {{ .Values.redis.image | quote }}
           ports:
             - name: redis
               containerPort: 6379
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           resources:
             {{- toYaml .Values.redis.resources | nindent 12 }}

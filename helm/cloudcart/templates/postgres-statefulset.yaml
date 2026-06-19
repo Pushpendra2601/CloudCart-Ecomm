@@ -17,12 +17,21 @@ spec:
       labels:
         app: cloudcart-postgres
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 70
+        runAsGroup: 70
+        fsGroup: 70
       containers:
         - name: postgres
           image: {{ .Values.postgres.image | quote }}
           ports:
             - name: postgres
               containerPort: 5432
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
           envFrom:
             - secretRef:
                 name: cloudcart-secret
