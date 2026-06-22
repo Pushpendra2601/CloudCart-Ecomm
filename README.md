@@ -11,6 +11,7 @@
 ![Grafana](https://img.shields.io/badge/Dashboard-Grafana-F46800?style=flat&logo=grafana&logoColor=white)
 ![Loki](https://img.shields.io/badge/Logs-Loki-F5A623?style=flat&logo=grafana&logoColor=white)
 ![Promtail](https://img.shields.io/badge/Collector-Promtail-F46800?style=flat&logo=grafana&logoColor=white)
+![Backstage](https://img.shields.io/badge/Portal-Backstage-9BF0E1?style=flat&logo=backstage&logoColor=black)
 ![React](https://img.shields.io/badge/Frontend-React-61DAFB?style=flat&logo=react&logoColor=black)
 ![NodeJS](https://img.shields.io/badge/Backend-Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
@@ -38,6 +39,7 @@ CloudCart includes:
 - Prometheus, Grafana, Alertmanager, Loki, Promtail, application metrics, and pod logs
 - Trivy image scanning and operational runbooks
 - Kyverno policy enforcement for admission-time platform guardrails
+- Backstage catalog metadata and TechDocs setup
 - Backup, rollback, and troubleshooting scripts
 
 ## Architecture Options
@@ -219,5 +221,6 @@ On the `argocd` branch:
 - [Monitoring Setup](docs/monitoring-setup.md)
 - [Logging Setup](docs/logging-setup.md)
 - [Kyverno Policy Enforcement](docs/kyverno-policy-plan.md)
+- [Backstage Setup](docs/backstage-setup.md)
 - [Interview Notes](docs/interview-notes.md)
 - [Trivy Policy](security/trivy-policy.md)
