@@ -1,0 +1,105 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: cloudcart-platform
+  title: CloudCart Platform
+  description: Cloud-native DevOps and platform engineering portfolio system.
+  tags:
+    - kubernetes
+    - devops
+    - platform-engineering
+spec:
+  owner: platform-team
+  domain: ecommerce
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cloudcart
+  title: CloudCart
+  description: Cloud-native e-commerce application deployed with Jenkins, ArgoCD, Helm, Kubernetes, Prometheus, Loki, and Kyverno.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: Pushpendra2601/CloudCart-Ecomm
+    argocd/app-name: cloudcart
+    grafana/dashboard-selector: cloudcart-overview
+  tags:
+    - react
+    - nodejs
+    - kubernetes
+    - helm
+    - argocd
+    - jenkins
+    - prometheus
+    - loki
+    - kyverno
+  links:
+    - url: https://github.com/Pushpendra2601/CloudCart-Ecomm
+      title: GitHub Repository
+      icon: github
+    - url: http://localhost:8082/applications/cloudcart
+      title: ArgoCD Application
+      icon: dashboard
+    - url: http://localhost:3000/d/cloudcart-overview/cloudcart-overview
+      title: Grafana Dashboard
+      icon: dashboard
+    - url: http://cloudcart.local
+      title: CloudCart Application
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: platform-team
+  system: cloudcart-platform
+  dependsOn:
+    - resource:default/cloudcart-postgres
+    - resource:default/cloudcart-redis
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: cloudcart-postgres
+  title: CloudCart PostgreSQL
+  description: PostgreSQL StatefulSet used by CloudCart.
+  tags:
+    - postgres
+    - database
+spec:
+  type: database
+  owner: platform-team
+  system: cloudcart-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Resource
+metadata:
+  name: cloudcart-redis
+  title: CloudCart Redis
+  description: Redis cache used by CloudCart.
+  tags:
+    - redis
+    - cache
+spec:
+  type: cache
+  owner: platform-team
+  system: cloudcart-platform
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-team
+  title: Platform Team
+  description: Team responsible for CloudCart platform delivery and operations.
+spec:
+  type: team
+  profile:
+    displayName: Platform Team
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: ecommerce
+  title: E-Commerce
+  description: E-commerce domain for CloudCart.
+spec:
+  owner: platform-team

@@ -1,0 +1,15 @@
+site_name: CloudCart Platform
+site_description: CloudCart DevOps and platform engineering documentation
+nav:
+  - Overview: index.md
+  - Architecture: architecture.md
+  - Runbook: runbook.md
+  - Jenkins Setup: jenkins-setup.md
+  - Monitoring Setup: monitoring-setup.md
+  - Logging Setup: logging-setup.md
+  - Kyverno Policy Enforcement: kyverno-policy-plan.md
+  - Backstage Setup: backstage-setup.md
+  - Interview Notes: interview-notes.md
+  - Trivy Policy: trivy-policy.md
+plugins:
+  - techdocs-core
