@@ -1,8 +1,8 @@
-# CloudCart Kyverno Policy Plan
+# CloudCart Kyverno Policy Enforcement
 
 Kyverno is a Kubernetes policy engine. It runs inside the cluster and works with the Kubernetes admission controller. When a user, Jenkins, Helm, or ArgoCD tries to create or update a resource, Kyverno can validate, mutate, generate, or report on that resource before it is accepted by the API server.
 
-For CloudCart, Kyverno will be used as a platform guardrail layer.
+For CloudCart, Kyverno is used as a platform guardrail layer.
 
 ## Why It Belongs In This Project
 
@@ -60,21 +60,21 @@ Expected behavior:
 - `ghcr.io/pushpendra2601/*` is allowed.
 - Public random images are blocked in the CloudCart namespace.
 
-## Suggested Rollout Approach
+## Rollout Approach Used
 
-Start with audit mode:
+The policies were first introduced in audit mode:
 
 ```yaml
 validationFailureAction: Audit
 ```
 
-Then move to enforce mode after existing workloads pass:
+After the Helm chart was hardened and policy reports showed current CloudCart workloads passing, the policies were moved to enforce mode:
 
 ```yaml
 validationFailureAction: Enforce
 ```
 
-This avoids breaking the cluster during the first policy installation.
+This avoided breaking ArgoCD sync during the first policy installation and then moved the cluster into active admission enforcement.
 
 ## Install Kyverno
 
@@ -111,7 +111,7 @@ chmod +x scripts/apply-kyverno-policies.sh
 ./scripts/apply-kyverno-policies.sh
 ```
 
-The first version runs in `Audit` mode so ArgoCD sync is not blocked while the platform rules are being introduced.
+The current repository version runs in `Enforce` mode. If the policies are being introduced into a fresh cluster, switch them to `Audit` first, review policy reports, harden workloads, and then move them back to `Enforce`.
 
 ## Check Reports
 
@@ -129,9 +129,7 @@ Apply the intentionally bad test pod:
 kubectl apply -f security/kyverno/test-bad-latest-pod.yaml
 ```
 
-In audit mode, Kyverno records a violation but does not block the pod.
-
-After switching the relevant policy to `Enforce`, the same manifest should be rejected.
+In enforce mode, Kyverno should reject the pod because it violates the image tag, registry, and non-root guardrails.
 
 Clean up:
 

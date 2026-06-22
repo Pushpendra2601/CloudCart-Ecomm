@@ -37,7 +37,7 @@ CloudCart includes:
 - Jenkins pipeline for CI, image scanning, image publishing, and deployment promotion
 - Prometheus, Grafana, Alertmanager, Loki, Promtail, application metrics, and pod logs
 - Trivy image scanning and operational runbooks
-- Kyverno policy enforcement planned for admission-time platform guardrails
+- Kyverno policy enforcement for admission-time platform guardrails
 - Backup, rollback, and troubleshooting scripts
 
 ## Architecture Options
@@ -218,6 +218,6 @@ On the `argocd` branch:
 - [Jenkins Setup](docs/jenkins-setup.md)
 - [Monitoring Setup](docs/monitoring-setup.md)
 - [Logging Setup](docs/logging-setup.md)
-- [Kyverno Policy Plan](docs/kyverno-policy-plan.md)
+- [Kyverno Policy Enforcement](docs/kyverno-policy-plan.md)
 - [Interview Notes](docs/interview-notes.md)
 - [Trivy Policy](security/trivy-policy.md)

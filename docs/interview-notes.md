@@ -2,7 +2,7 @@
 
 ## Resume Summary
 
-Built a production-grade Kubernetes DevOps platform for a CloudCart e-commerce application using Docker, Jenkins CI, Helm, ArgoCD GitOps, Prometheus, Grafana, Alertmanager, Loki, Promtail, Ingress NGINX, HPA, ConfigMaps, Secrets, RBAC, NetworkPolicies, PostgreSQL persistent storage, Redis caching, Trivy image scanning, drift detection, rollback, and operational runbooks.
+Built a production-grade Kubernetes DevOps platform for a CloudCart e-commerce application using Docker, Jenkins CI, Helm, ArgoCD GitOps, Prometheus, Grafana, Alertmanager, Loki, Promtail, Ingress NGINX, HPA, ConfigMaps, Secrets, RBAC, NetworkPolicies, PostgreSQL persistent storage, Redis caching, Trivy image scanning, Kyverno admission control, drift detection, rollback, and operational runbooks.
 
 ## ATS Keywords
 
@@ -20,7 +20,7 @@ Kubernetes, Docker, Jenkins, CI/CD, Helm, Prometheus, Grafana, Alertmanager, Lok
 - How does Prometheus discover CloudCart metrics?
 - How do Loki and Promtail provide centralized logging?
 - What does ArgoCD drift detection mean?
-- Where would Kyverno fit in this platform?
+- How does Kyverno enforce platform standards at admission time?
 - What would change when moving this to EKS, AKS, or GKE?
 
 ## Real-World Scenarios
@@ -32,3 +32,4 @@ Kubernetes, Docker, Jenkins, CI/CD, Helm, Prometheus, Grafana, Alertmanager, Lok
 - Database storage grows: check PVC usage alert and run backup or expansion procedure.
 - Jenkins cannot push image tag update: check GitHub credentials, repository permissions, and `values-gitops.yaml`.
 - Ingress returns 404: check ingress class, host header, path rules, and backend service ports.
+- A bad workload is rejected: check Kyverno ClusterPolicy status, PolicyReports, and admission error messages.

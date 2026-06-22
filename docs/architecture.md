@@ -54,4 +54,4 @@ CloudCart is a production-oriented Kubernetes project built around a small e-com
 - HPA scales backend replicas using CPU utilization.
 - NetworkPolicies limit service-to-service communication.
 - RBAC limits service account access.
-- Kyverno policies are planned to enforce platform guardrails at admission time.
+- Kyverno policies enforce platform guardrails at admission time.
