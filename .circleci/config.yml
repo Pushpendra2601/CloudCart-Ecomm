@@ -9,8 +9,18 @@ jobs:
     executor: node/default
     working_directory: ~/project/app/frontend
     steps:
-      - checkout:
-          path: ~/project
+      - run:
+          name: Checkout code
+          command: |
+            for attempt in 1 2 3; do
+              if git clone "$CIRCLE_REPOSITORY_URL" ~/project; then
+                cd ~/project && git checkout "$CIRCLE_SHA1"
+                break
+              fi
+              echo "Checkout attempt $attempt/3 failed, retrying in 30s..."
+              rm -rf ~/project
+              [ $attempt -lt 3 ] && sleep 30
+            done
       - node/install-packages:
           pkg-manager: npm
       - run:
