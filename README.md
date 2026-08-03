@@ -211,7 +211,7 @@ On the `argocd` branch:
 - Helm branch deploys directly with Helm
 - ArgoCD branch deploys by updating Git and letting ArgoCD reconcile Kubernetes state
 - Rollback in the Helm flow is handled through Helm release history
-- Rollback in the GitOps flow is handled through Git revert or ArgoCD sync history
+- Rollback in the GitOps flow is handled through Git revert or ArgoCD sync history.
 
 ## Documentation
 
